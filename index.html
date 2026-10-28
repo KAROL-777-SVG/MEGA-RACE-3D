@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>MEGA RACE 3D</title>
+  <link rel="stylesheet" href="/styles/main.css" />
+</head>
+<body>
+  <div id="app">
+    <canvas id="game-canvas"></canvas>
+
+    <!-- LOADING -->
+    <div id="loading-screen" class="screen active">
+      <div class="loader-content">
+        <h1 class="logo">MEGA <span>RACE</span> 3D</h1>
+        <div class="progress-bar"><div id="progress-fill"></div></div>
+        <p id="loading-text">Yuklanmoqda...</p>
+      </div>
+    </div>
+
+    <!-- MAIN MENU -->
+    <div id="main-menu" class="screen">
+      <div class="menu-overlay"></div>
+      <div class="menu-content">
+        <h1 class="logo">MEGA <span>RACE</span> 3D</h1>
+        <nav class="menu-nav">
+          <button class="menu-btn primary" data-action="play">▶ PLAY</button>
+          <button class="menu-btn" data-action="garage">🔧 GARAGE</button>
+          <button class="menu-btn" data-action="settings">⚙ SETTINGS</button>
+          <button class="menu-btn" data-action="controls">🎮 CONTROLS</button>
+        </nav>
+        <div class="menu-footer">
+          <span id="menu-money">$0</span>
+          <span>MEGA RACE 3D v0.1 MVP</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HUD -->
+    <div id="hud" class="hidden">
+      <div id="hud-top-left">
+        <div class="hud-panel">
+          <div class="hud-label">HUDUD</div>
+          <div id="hud-zone" class="hud-value">Mega City</div>
+        </div>
+        <div class="hud-panel">
+          <div class="hud-label">VAQT</div>
+          <div id="hud-time" class="hud-value">00:00</div>
+        </div>
+      </div>
+
+      <div id="hud-top-right">
+        <div class="hud-panel mini">
+          <div class="hud-label">PUL</div>
+          <div id="hud-money" class="hud-value">$0</div>
+        </div>
+      </div>
+
+      <div id="minimap-wrap">
+        <canvas id="minimap" width="180" height="180"></canvas>
+      </div>
+
+      <div id="hud-bottom">
+        <div id="speedometer">
+          <div class="speed-value"><span id="speed-num">0</span><span class="speed-unit">KM/H</span></div>
+          <div class="nitro-bar"><div id="nitro-fill"></div></div>
+        </div>
+      </div>
+
+      <div id="hud-hint">WASD — Harakat | SHIFT — Nitro | SPACE — Qo'l tormozi | C — Kamera | ESC — Pauza</div>
+
+      <!-- MOBILE CONTROLS -->
+      <div id="mobile-controls" class="hidden">
+        <div class="mc-left">
+          <button class="mc-btn" data-key="a">◀</button>
+          <button class="mc-btn" data-key="d">▶</button>
+        </div>
+        <div class="mc-right">
+          <button class="mc-btn small" data-key="space">HAND</button>
+          <button class="mc-btn small" data-key="shift">N₂O</button>
+          <button class="mc-btn brake" data-key="s">▼</button>
+          <button class="mc-btn gas" data-key="w">▲</button>
+        </div>
+        <button id="mc-camera" class="mc-btn cam">📷</button>
+      </div>
+    </div>
+
+    <!-- PAUSE -->
+    <div id="pause-menu" class="screen">
+      <div class="menu-content small">
+        <h2>PAUZA</h2>
+        <button class="menu-btn primary" data-action="resume">▶ DAVOM ETISH</button>
+        <button class="menu-btn" data-action="menu">🏠 ASOSIY MENYU</button>
+      </div>
+    </div>
+
+    <!-- GARAGE -->
+    <div id="garage-menu" class="screen">
+      <div class="menu-content wide">
+        <h2>🔧 GARAGE</h2>
+        <div id="garage-list" class="garage-list"></div>
+        <button class="menu-btn" data-action="menu">← ORQAGA</button>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="settings-menu" class="screen">
+      <div class="menu-content">
+        <h2>⚙ SOZLAMALAR</h2>
+        <label class="setting-row">Grafika: <select id="set-quality">
+          <option value="low">Low</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High</option>
+        </select></label>
+        <label class="setting-row">Kamera sezgirligi: <input id="set-camsens" type="range" min="0.5" max="2" step="0.1" value="1"></label>
+        <label class="setting-row">Ovoz: <input id="set-volume" type="range" min="0" max="1" step="0.1" value="0.5"></label>
+        <button class="menu-btn" data-action="menu">← ORQAGA</button>
+      </div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div id="controls-menu" class="screen">
+      <div class="menu-content">
+        <h2>🎮 BOSHQARUV</h2>
+        <ul class="controls-list">
+          <li><b>W</b> — Gaz</li>
+          <li><b>S</b> — Tormoz / Orqaga</li>
+          <li><b>A / D</b> — Rul</li>
+          <li><b>SPACE</b> — Qo'l tormozi</li>
+          <li><b>SHIFT</b> — Nitro</li>
+          <li><b>C</b> — Kamera</li>
+          <li><b>ESC</b> — Pauza</li>
+        </ul>
+        <button class="menu-btn" data-action="menu">← ORQAGA</button>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

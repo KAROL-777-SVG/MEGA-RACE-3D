@@ -1,0 +1,151 @@
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #080B10;
+  --bg2: #151B24;
+  --neon: #00C8FF;
+  --electric: #246BFD;
+  --text: #F5F7FA;
+  --purple: #B100FF;
+  --warn: #FF8A00;
+}
+html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: 'Segoe UI', 'Rajdhani', sans-serif; user-select: none; }
+#app { position: relative; width: 100vw; height: 100vh; }
+#game-canvas { display: block; width: 100%; height: 100%; }
+
+.screen {
+  position: absolute; inset: 0;
+  display: none; align-items: center; justify-content: center;
+  background: radial-gradient(circle at 50% 30%, #0a1424 0%, #080B10 70%);
+  z-index: 100;
+}
+.screen.active { display: flex; }
+.hidden { display: none !important; }
+
+.logo {
+  font-size: 3.5rem; font-weight: 900; letter-spacing: 6px;
+  color: var(--text); text-shadow: 0 0 20px var(--neon);
+  margin-bottom: 2rem;
+}
+.logo span { color: var(--neon); }
+
+#loading-screen .loader-content { text-align: center; }
+.progress-bar {
+  width: 320px; height: 8px; background: var(--bg2);
+  border: 1px solid var(--neon); border-radius: 4px; margin: 1rem auto; overflow: hidden;
+}
+#progress-fill {
+  height: 100%; width: 0%; background: linear-gradient(90deg, var(--neon), var(--electric));
+  transition: width 0.3s;
+}
+
+.menu-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(8,11,16,0.85), rgba(21,27,36,0.7));
+}
+.menu-content {
+  position: relative; z-index: 2; text-align: center;
+  padding: 2rem 3rem;
+  background: rgba(21,27,36,0.85);
+  border: 1px solid var(--neon);
+  border-radius: 16px;
+  box-shadow: 0 0 40px rgba(0,200,255,0.2);
+  min-width: 320px;
+}
+.menu-content.wide { width: 80vw; max-width: 900px; }
+.menu-content.small { min-width: 260px; }
+.menu-content h2 { margin-bottom: 1.5rem; letter-spacing: 4px; color: var(--neon); }
+
+.menu-nav { display: flex; flex-direction: column; gap: 0.8rem; }
+.menu-btn {
+  padding: 0.9rem 2rem; font-size: 1rem; letter-spacing: 2px; font-weight: 700;
+  background: var(--bg2); color: var(--text);
+  border: 1px solid rgba(0,200,255,0.4); border-radius: 8px;
+  cursor: pointer; transition: all 0.2s;
+}
+.menu-btn:hover { background: rgba(0,200,255,0.15); border-color: var(--neon); box-shadow: 0 0 20px rgba(0,200,255,0.4); }
+.menu-btn.primary { background: linear-gradient(135deg, var(--neon), var(--electric)); color: #000; border: none; }
+.menu-btn.primary:hover { filter: brightness(1.2); }
+
+.menu-footer { display: flex; justify-content: space-between; margin-top: 1.5rem; font-size: 0.8rem; color: #8899aa; }
+
+/* HUD */
+#hud { position: absolute; inset: 0; pointer-events: none; z-index: 50; }
+#hud > * { pointer-events: auto; }
+
+#hud-top-left { position: absolute; top: 16px; left: 16px; display: flex; flex-direction: column; gap: 8px; }
+#hud-top-right { position: absolute; top: 16px; right: 200px; }
+
+.hud-panel {
+  background: rgba(8,11,16,0.75); border-left: 3px solid var(--neon);
+  padding: 6px 12px; border-radius: 4px; min-width: 110px;
+}
+.hud-panel.mini { min-width: 90px; }
+.hud-label { font-size: 0.65rem; letter-spacing: 2px; color: #8899aa; }
+.hud-value { font-size: 1rem; font-weight: 700; color: var(--neon); }
+
+#minimap-wrap {
+  position: absolute; top: 16px; right: 16px;
+  width: 180px; height: 180px;
+  border: 2px solid var(--neon); border-radius: 8px; overflow: hidden;
+  background: rgba(8,11,16,0.8); box-shadow: 0 0 20px rgba(0,200,255,0.3);
+}
+#minimap { width: 100%; height: 100%; }
+
+#hud-bottom { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); }
+#speedometer {
+  background: rgba(8,11,16,0.85); border: 2px solid var(--neon);
+  border-radius: 12px; padding: 10px 30px; text-align: center;
+  box-shadow: 0 0 30px rgba(0,200,255,0.3);
+}
+.speed-value { display: flex; align-items: baseline; gap: 6px; justify-content: center; }
+#speed-num { font-size: 2.4rem; font-weight: 900; color: var(--neon); text-shadow: 0 0 15px var(--neon); }
+.speed-unit { font-size: 0.8rem; letter-spacing: 2px; color: #8899aa; }
+.nitro-bar { width: 180px; height: 6px; background: var(--bg2); border-radius: 3px; margin-top: 6px; overflow: hidden; }
+#nitro-fill { height: 100%; width: 100%; background: linear-gradient(90deg, var(--purple), #FF00E0); transition: width 0.1s; }
+
+#hud-hint {
+  position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+  font-size: 0.7rem; color: #667788; letter-spacing: 1px;
+}
+
+/* MOBILE CONTROLS */
+#mobile-controls { position: absolute; inset: 0; pointer-events: none; }
+.mc-left { position: absolute; left: 20px; bottom: 100px; display: flex; gap: 14px; }
+.mc-right { position: absolute; right: 20px; bottom: 100px; display: flex; gap: 10px; align-items: flex-end; }
+.mc-btn {
+  pointer-events: auto; width: 64px; height: 64px; border-radius: 50%;
+  background: rgba(0,200,255,0.2); border: 2px solid var(--neon);
+  color: var(--neon); font-size: 1.4rem; font-weight: 900; touch-action: none;
+}
+.mc-btn:active { background: rgba(0,200,255,0.5); }
+.mc-btn.small { width: 50px; height: 50px; font-size: 0.7rem; }
+.mc-btn.gas { background: rgba(0,255,120,0.2); border-color: #00ff78; color: #00ff78; }
+.mc-btn.brake { background: rgba(255,80,80,0.2); border-color: #ff5050; color: #ff5050; }
+.mc-btn.cam { position: absolute; right: 20px; top: 220px; width: 50px; height: 50px; font-size: 1.2rem; }
+
+/* GARAGE */
+.garage-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 1.5rem; }
+.car-card {
+  background: var(--bg2); border: 1px solid rgba(0,200,255,0.3);
+  border-radius: 8px; padding: 12px; cursor: pointer; transition: all 0.2s;
+}
+.car-card:hover { border-color: var(--neon); box-shadow: 0 0 15px rgba(0,200,255,0.3); }
+.car-card.selected { border-color: var(--purple); box-shadow: 0 0 20px rgba(177,0,255,0.4); }
+.car-card h3 { color: var(--neon); font-size: 1rem; margin-bottom: 4px; }
+.car-card .car-stat { font-size: 0.7rem; color: #8899aa; }
+
+.setting-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; gap: 12px; }
+.setting-row select, .setting-row input { background: var(--bg); color: var(--text); border: 1px solid var(--neon); border-radius: 4px; padding: 4px 8px; }
+.controls-list { list-style: none; text-align: left; margin-bottom: 1.5rem; }
+.controls-list li { padding: 4px 0; color: #ccddee; }
+.controls-list b { color: var(--neon); }
+
+@media (max-width: 768px) {
+  .logo { font-size: 2rem; letter-spacing: 3px; }
+  .menu-content { padding: 1.5rem; }
+  #minimap-wrap { width: 120px; height: 120px; }
+  #hud-top-right { right: 140px; }
+  #hud-hint { display: none; }
+  .speed-value #speed-num { font-size: 1.6rem; }
+}
